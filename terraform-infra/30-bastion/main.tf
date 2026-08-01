@@ -39,7 +39,7 @@ resource "aws_iam_role" "bastion_role" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = "://amazonaws.com"
+          Service = "ec2.amazonaws.com"
         }
       }
     ]
