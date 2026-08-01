@@ -11,9 +11,17 @@ resource "aws_instance" "bastion" {
 
   # Assigns a public IP address so you can access it over the internet
   associate_public_ip_address = true
+
   # Connects the IAM Instance Profile to this EC2 instance
   iam_instance_profile = aws_iam_instance_profile.bastion_profile.name
 
+  # Configures the root EBS storage volume
+  root_block_device {
+    volume_size           = 50    # Sets size to exactly 50 GB
+    volume_type           = "gp3" # Uses modern, cost-efficient gp3 storage
+    encrypted             = true  # Encrypts the volume at rest (Best Practice)
+    delete_on_termination = true  # Cleans up storage automatically if instance is deleted
+  }
   tags = local.bastion_final_tags
 
 
