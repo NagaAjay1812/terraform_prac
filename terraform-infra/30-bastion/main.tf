@@ -22,9 +22,12 @@ resource "aws_instance" "bastion" {
     encrypted             = true  # Encrypts the volume at rest (Best Practice)
     delete_on_termination = true  # Cleans up storage automatically if instance is deleted
   }
-  tags = local.bastion_final_tags
+  tags = merge(local.bastion_final_tags,
+    {
+      Name = "${var.project}-${var.environment}-bastion"
+    }
 
-
+  )
 
 }
 
