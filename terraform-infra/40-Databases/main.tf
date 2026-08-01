@@ -1,5 +1,5 @@
 # 1. Create the Bastion EC2 Instance
-resource "aws_instance" "bastion" {
+resource "aws_instance" "mongoDB" {
   ami           = local.ami_id
   instance_type = var.inst_type
 
@@ -7,46 +7,43 @@ resource "aws_instance" "bastion" {
   subnet_id = local.subnet_useast1a_id
 
   # Uses your existing Bastion Security Group ID local
-  vpc_security_group_ids = [local.bastion_sg_id]
+  vpc_security_group_ids = [local.mongodb_sg_id]
 
-  # Assigns a public IP address so you can access it over the internet
-  associate_public_ip_address = true
-  # Connects the IAM Instance Profile to this EC2 instance
-  iam_instance_profile = aws_iam_instance_profile.bastion_profile.name
-
-  tags = local.bastion_final_tags
-
-
+  tags = local.mongodb_final_tags
 
 }
+# 2. Trigger file copy and execution when Instance ID changes
+resource "terraform_data" "mongodb" {
+  triggers_replace = [
+    aws_instance.mongodb.id
+  ]
 
-# 2. Create the IAM Role and define its Trust Policy (Allows EC2 to assume it)
-resource "aws_iam_role" "bastion_role" {
-  name = "${var.project}-${var.environment}-bastion-role"
+  # Connection details for both provisioners
+  connection {
+    type     = "ssh"
+    user     = "ec2-user" # Change to "ubuntu" if using Ubuntu AMI
+    password = "DevOps321"
+    host     = aws_instance.mongodb.private_ip # Use .private_ip if inside a private VPC
+  }
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "://amazonaws.com"
-        }
-      }
+  # STEP 1: Copy bootstrap.sh from your local computer to the EC2 instance
+  provisioner "file" {
+    source      = "bootstrap.sh"      # Local path to your script
+    destination = "/tmp/bootstrap.sh" # Remote destination path
+  }
+
+  # STEP 2: Make the script executable and execute it via remote-exec
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/bootstrap.sh",
+      "sudo sh /tmp/bootstrap.sh mongodb ${var.environment}"
     ]
-  })
+  }
 }
 
-# Attach Full Administration Access to the Bastion Role
-resource "aws_iam_role_policy_attachment" "bastion_admin" {
-  role       = aws_iam_role.bastion_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
 
-# 3. Create the IAM Instance Profile (This is what EC2 actually uses)
-resource "aws_iam_instance_profile" "bastion_profile" {
-  name = "${var.project}-${var.environment}-bastion-profile"
-  role = aws_iam_role.bastion_role.name
-}
+
+
+
+
 
