@@ -15,6 +15,7 @@ resource "aws_instance" "bastion" {
   # Connects the IAM Instance Profile to this EC2 instance
   iam_instance_profile = aws_iam_instance_profile.bastion_profile.name
 
+  user_data = file("bastion.sh")
   # Configures the root EBS storage volume
   root_block_device {
     volume_size           = 50    # Sets size to exactly 50 GB
