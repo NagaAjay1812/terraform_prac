@@ -6,7 +6,7 @@ locals {
   subnet_useast1a_id = local.public_subnet_list[0]
 
   bastion_sg_id = data.aws_ssm_parameter.bastion.value
-  Name          = "${var.project}-${var.environment}-bastion"
+
   common_tags = {
     project   = "roboshop"
     Terraform = "true"
