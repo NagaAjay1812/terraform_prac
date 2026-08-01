@@ -6,6 +6,11 @@ growpart /dev/nvme0n1 4
 lvextend -r -L +30G /dev/mapper/RootVG-homeVol
 xfs_growfs /home
 
+# 4. Install Yum utilities
 yum install -y yum-utils
+
+# 5. Connect official HashiCorp release stream
 yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-yum -y install terraform
+
+# 6. Install the Terraform binary 
+yum install -y terraform
