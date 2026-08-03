@@ -18,3 +18,6 @@ data "aws_ssm_parameter" "database_subnets" {
 data "aws_ssm_parameter" "mongodb" {
   name = "/${var.project}/${var.environment}/mongodb_sg_id" # Replace with your SSM parameter path
 }
+data "aws_ssm_parameter" "redis" {
+  name = "/${var.project}/${var.environment}/redis_sg_id" # Replace with your SSM parameter path
+}

@@ -15,34 +15,34 @@ resource "aws_instance" "mongoDB" {
     }
   )
 }
-# # step:2. Trigger file copy and execution when Instance ID changes
-# resource "terraform_data" "mongodb" {
-#   triggers_replace = [
-#     aws_instance.mongodb.id
-#   ]
+# step:2. Trigger file copy and execution when Instance ID changes
+resource "terraform_data" "mongodb" {
+  triggers_replace = [
+    aws_instance.mongodb.id
+  ]
 
-#   # Connection details for both provisioners
-#   connection {
-#     type     = "ssh"
-#     user     = "ec2-user" # Change to "ubuntu" if using Ubuntu AMI
-#     password = "DevOps321"
-#     host     = aws_instance.mongodb.private_ip # Use .private_ip if inside a private VPC
-#   }
+  # Connection details for both provisioners
+  connection {
+    type     = "ssh"
+    user     = "ec2-user" # Change to "ubuntu" if using Ubuntu AMI
+    password = "DevOps321"
+    host     = aws_instance.mongodb.private_ip # Use .private_ip if inside a private VPC
+  }
 
-#   # STEP 3: Copy bootstrap.sh from your local computer to the EC2 instance
-#   provisioner "file" {
-#     source      = "bootstrap.sh"      # Local path to your script
-#     destination = "/tmp/bootstrap.sh" # Remote destination path
-#   }
+  # STEP 3: Copy bootstrap.sh from your local computer to the EC2 instance
+  provisioner "file" {
+    source      = "bootstrap.sh"      # Local path to your script
+    destination = "/tmp/bootstrap.sh" # Remote destination path
+  }
 
-#   # STEP 4: Make the script executable and execute it via remote-exec
-#   provisioner "remote-exec" {
-#     inline = [
-#       "chmod +x /tmp/bootstrap.sh",
-#       "sudo sh /tmp/bootstrap.sh mongodb ${var.environment}"
-#     ]
-#   }
-# }
+  # STEP 4: Make the script executable and execute it via remote-exec
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/bootstrap.sh",
+      "sudo sh /tmp/bootstrap.sh mongodb ${var.environment}"
+    ]
+  }
+}
 
 # # 2) step: 1 Create the redis EC2 Instance in database subnet
 # resource "aws_instance" "redis" {
