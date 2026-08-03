@@ -23,7 +23,9 @@ variable "sg_names" {
 
 }
 variable "sg_tags" {
-  default = {}
+  default = {
+
+  }
 }
 
 
