@@ -6,12 +6,15 @@ locals {
   subnet_useast1a_id = local.database_subnet_list[0]
 
   mongodb_sg_id = data.aws_ssm_parameter.mongodb.value
-  Name          = "${var.project}-${var.environment}-mongodb"
+  redis_sg_id   = data.aws_ssm_parameter.redis.value
+
+
   common_tags = {
     project   = "roboshop"
     Terraform = "true"
   }
 
   mongodb_final_tags = merge(local.common_tags, var.mongodb_tags)
+  redis_final_tags   = merge(local.common_tags, var.mongodb_tags)
 }
 

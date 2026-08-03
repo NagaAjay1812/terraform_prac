@@ -26,7 +26,7 @@ resource "terraform_data" "mongodb" {
     type     = "ssh"
     user     = "ec2-user" # Change to "ubuntu" if using Ubuntu AMI
     password = "DevOps321"
-    host     = aws_instance.mongodb.private_ip # Use .private_ip if inside a private VPC
+    host     = aws_instance.mongoDB.private_ip # Use .private_ip if inside a private VPC
   }
 
   # STEP 3: Copy bootstrap.sh from your local computer to the EC2 instance
