@@ -142,34 +142,20 @@ resource "aws_nat_gateway" "nat" {
 
   )
 }
-# --- UPDATE PRIVATE ROUTE TABLE ---
-resource "aws_route_table" "private_internet_route" {
-  vpc_id = aws_vpc.main.id
 
-  # Direct all outbound internet traffic to the NAT Gateway
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
-  }
 
-  tags = {
-    Name = "${var.project}-private"
-  }
+# --- PRIVATE ROUTE (Attaches NAT Gateway to Private Route Table) ---
+resource "aws_route" "private_internet_route" {
+  route_table_id         = aws_route_table.private_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat.id
 }
 
-# --- UPDATE DATABASE ROUTE TABLE ---
-resource "aws_route_table" "database_internet_route" {
-  vpc_id = aws_vpc.main.id
-
-  # Direct all outbound database syncing/patching traffic to the NAT Gateway
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
-  }
-
-  tags = {
-    Name = "${var.project}-database"
-  }
+# --- DATABASE ROUTE (Attaches NAT Gateway to Database Route Table) ---
+resource "aws_route" "database_internet_route" {
+  route_table_id         = aws_route_table.database_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat.id
 }
 
 
