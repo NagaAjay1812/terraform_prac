@@ -18,7 +18,7 @@ resource "aws_instance" "mongoDB" {
 # step:2. Trigger file copy and execution when Instance ID changes
 resource "terraform_data" "mongodb" {
   triggers_replace = [
-    aws_instance.mongodb.id
+    aws_instance.mongoDB.id
   ]
 
   # Connection details for both provisioners
