@@ -3,7 +3,7 @@ locals {
   database_subnet_list = split(",", data.aws_ssm_parameter.database_subnets.value)
 
   # Grabs index 0, which corresponds to your first subnet (us-east-1a)
-  subnet_useast1a_id = local.public_database_list[0]
+  subnet_useast1a_id = local.database_subnet_list[0]
 
   mongodb_sg_id = data.aws_ssm_parameter.mongodb.value
   Name          = "${var.project}-${var.environment}-mongodb"
