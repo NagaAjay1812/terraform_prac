@@ -1,5 +1,5 @@
 # 1)step:1 Create the mongoDB EC2 Instance in database subnet
-resource "aws_instance" "mongoDB" {
+resource "aws_instance" "mongodb" {
   ami           = local.ami_id
   instance_type = var.inst_type
 
@@ -16,9 +16,9 @@ resource "aws_instance" "mongoDB" {
   )
 }
 # step:2. Trigger file copy and execution when Instance ID changes
-resource "terraform_data" "mongodb" {
+resource "terraform_data" "bootstrap_mongodb" {
   triggers_replace = [
-    aws_instance.mongoDB.id
+    aws_instance.mongodb.id
   ]
 
   # Connection details for both provisioners
@@ -26,7 +26,7 @@ resource "terraform_data" "mongodb" {
     type     = "ssh"
     user     = "ec2-user" # Change to "ubuntu" if using Ubuntu AMI
     password = "DevOps321"
-    host     = aws_instance.mongoDB.private_ip # Use .private_ip if inside a private VPC
+    host     = aws_instance.mongodb.private_ip # Use .private_ip if inside a private VPC
   }
 
   # STEP 3: Copy bootstrap.sh from your local computer to the EC2 instance
