@@ -1,16 +1,12 @@
 #!/bin/bash
 
 component=$1
+environment=$2
+dnf install ansible -y
 
-dnf install -y ansible python3-pip git
-python3 -m pip install boto3 botocore PyMySQL
+cd /home/ec2-user
+git clone https://github.com/daws-88s/ansible-roboshop-roles-tf.git
 
-cd /home/ec2-user || exit 1
-
-if [ ! -d ansible-roboshop-roles-tf ]; then
-  git clone https://github.com/NagaAjay1812/ansible-roboshop-roles-tf.git
-fi
-
-cd ansible-roboshop-roles-tf || exit 1
-
-ansible-playbook -e "component=${component}" roboshop.yaml
+cd ansible-roboshop-roles-tf
+git pull
+ansible-playbook -e component=$component -e env=$environment roboshop.yaml
