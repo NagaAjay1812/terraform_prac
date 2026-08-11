@@ -21,3 +21,11 @@ data "aws_ssm_parameter" "mongodb" {
 data "aws_ssm_parameter" "redis" {
   name = "/${var.project}/${var.environment}/redis_sg_id" # Replace with your SSM parameter path
 }
+
+data "aws_ssm_paramter" "mysql" {
+  name = "/${var.project}/${var.environment}/mysql_sg_id"
+}
+data "aws_ssm_paramter" "rabbitmq" {
+  name = "/${var.project}/${var.environment}/rabbitmq_sg_id"
+}
+

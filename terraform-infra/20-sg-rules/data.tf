@@ -10,4 +10,11 @@ data "aws_ssm_parameter" "catalogue" {
 data "aws_ssm_parameter" "user" {
   name = "/${var.project}/${var.environment}/user_sg_id" # Replace with your SSM parameter path
 }
+data "aws_ssm_parameter" "mysql" {
+  name = "/${var.project}/${var.environment}/mysql_sg_id" # Replace with your SSM parameter path
+}
+data "aws_ssm_parameter" "rabbitmq" {
+  name = "/${var.project}/${var.environment}/rabbitmq_sg_id" # Replace with your SSM parameter path
+}
+
 

@@ -5,16 +5,19 @@ locals {
   # Grabs index 0, which corresponds to your first subnet (us-east-1a)
   subnet_useast1a_id = local.database_subnet_list[0]
 
-  mongodb_sg_id = data.aws_ssm_parameter.mongodb.value
-  redis_sg_id   = data.aws_ssm_parameter.redis.value
-
+  mongodb_sg_id  = data.aws_ssm_parameter.mongodb.value
+  redis_sg_id    = data.aws_ssm_parameter.redis.value
+  mysql_sg_id    = data.aws_ssm_parameter.mysql.value
+  rabbitmq_sg_id = data.aws_ssm_parameter.rabbitmq.value
 
   common_tags = {
     project   = "roboshop"
     Terraform = "true"
   }
 
-  mongodb_final_tags = merge(local.common_tags, var.mongodb_tags)
-  redis_final_tags   = merge(local.common_tags, var.mongodb_tags)
+  mongodb_final_tags  = merge(local.common_tags, var.mongodb_tags)
+  redis_final_tags    = merge(local.common_tags, var.redis_tags)
+  mysql_final_tags    = merge(local.common_tags, var.mysql_tags)
+  rabbitmq_final_tags = merge(local.common_tags, var.rabbitmq_tags)
 }
 

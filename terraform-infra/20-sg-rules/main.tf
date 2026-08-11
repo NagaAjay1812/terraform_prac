@@ -25,6 +25,32 @@ resource "aws_security_group_rule" "mongodb_from_bastion" {
   source_security_group_id = local.bastion_sg_id
   security_group_id        = local.mongodb_sg_id
 }
+# Rule 3: Bastion to MySQL
+resource "aws_security_group_rule" "mysql_from_bastion" {
+  type        = "ingress"
+  description = "Allow inbound SSH traffic from bastion"
+
+  from_port = 22
+  to_port   = 22
+  protocol  = "tcp"
+
+  # Source and Target SG connections
+  source_security_group_id = local.bastion_sg_id
+  security_group_id        = local.mysql_sg_id
+}
+# Rule 4: Bastion to Rabbitmq
+resource "aws_security_group_rule" "rabbitmq_from_bastion" {
+  type        = "ingress"
+  description = "Allow inbound SSH traffic from bastion"
+
+  from_port = 22
+  to_port   = 22
+  protocol  = "tcp"
+
+  # Source and Target SG connections
+  source_security_group_id = local.bastion_sg_id
+  security_group_id        = local.rabbitmq_sg_id
+}
 
 # Rule 3: MongoDB to Catalogue
 resource "aws_security_group_rule" "mongodb_from_catalogue" {
