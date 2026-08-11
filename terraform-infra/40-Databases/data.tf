@@ -22,10 +22,10 @@ data "aws_ssm_parameter" "redis" {
   name = "/${var.project}/${var.environment}/redis_sg_id" # Replace with your SSM parameter path
 }
 
-data "aws_ssm_paramter" "mysql" {
+data "aws_ssm_parameter" "mysql" {
   name = "/${var.project}/${var.environment}/mysql_sg_id"
 }
-data "aws_ssm_paramter" "rabbitmq" {
+data "aws_ssm_parameter" "rabbitmq" {
   name = "/${var.project}/${var.environment}/rabbitmq_sg_id"
 }
 
