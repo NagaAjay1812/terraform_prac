@@ -99,6 +99,7 @@ resource "aws_instance" "mysql" {
 
   # Uses your existing Bastion Security Group ID local
   vpc_security_group_ids = [local.mysql_sg_id]
+  iam_instance_profile   = aws_iam_instance_profile.mysql.name
 
   tags = merge(local.mysql_final_tags,
     {

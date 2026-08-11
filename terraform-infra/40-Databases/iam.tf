@@ -1,6 +1,4 @@
-# 1. Create the IAM Role and define its Trust Policy (Allows EC2 to assume it)
 resource "aws_iam_role" "mysql" {
-  # FIXED: Matches exactly "RoboshopDevMySQL" without trailing hyphens or strings
   name = "${title(var.project)}${title(var.environment)}MySQL"
 
   assume_role_policy = jsonencode({
@@ -10,19 +8,19 @@ resource "aws_iam_role" "mysql" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = "://amazonaws.com"
+          Service = "ec2.amazonaws.com"
         }
       }
     ]
   })
 }
 
-# 2. Read and populate the external JSON policy file dynamically
 resource "aws_iam_policy" "mysql" {
   name        = "${var.project}-${var.environment}-mysql-ssm-policy"
-  description = "policy for MySQL EC2 Instance"
+  description = "Policy for MySQL EC2 instance"
 
-  policy = templatefile("iam_role_policy.json", {
+  policy = templatefile("${path.module}/iam_role_policy.json", {
+    project     = var.project
     environment = var.environment
   })
 }
