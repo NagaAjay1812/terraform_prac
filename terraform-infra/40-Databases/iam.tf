@@ -1,5 +1,5 @@
 # 1. Create the IAM Role and define its Trust Policy (Allows EC2 to assume it)
-resource "aws_iam_role" "mysql_role" {
+resource "aws_iam_role" "mysql" {
   # FIXED: Matches exactly "RoboshopDevMySQL" without trailing hyphens or strings
   name = "${title(var.project)}${title(var.environment)}MySQL"
 
@@ -18,24 +18,23 @@ resource "aws_iam_role" "mysql_role" {
 }
 
 # 2. Read and populate the external JSON policy file dynamically
-resource "aws_iam_policy" "mysql_ssm_policy" {
+resource "aws_iam_policy" "mysql" {
   name        = "${var.project}-${var.environment}-mysql-ssm-policy"
-  description = "Allows read access strictly to the MySQL root password parameter"
+  description = "policy for MySQL EC2 Instance"
 
-  policy = templatefile("${path.module}/iam_role_policy.json", {
-    project     = var.project
+  policy = templatefile("iam_role_policy.json", {
     environment = var.environment
   })
 }
 
 # 3. Attach the custom SSM policy to your MySQL role
-resource "aws_iam_role_policy_attachment" "mysql_ssm_attach" {
-  role       = aws_iam_role.mysql_role.name
-  policy_arn = aws_iam_policy.mysql_ssm_policy.arn
+resource "aws_iam_role_policy_attachment" "mysql" {
+  role       = aws_iam_role.mysql.name
+  policy_arn = aws_iam_policy.mysql.arn
 }
 
 # 4. Create the IAM Instance Profile (This is what the EC2 resource block calls)
-resource "aws_iam_instance_profile" "mysql_profile" {
+resource "aws_iam_instance_profile" "mysql" {
   name = "${var.project}-${var.environment}-mysql-profile"
-  role = aws_iam_role.mysql_role.name
+  role = aws_iam_role.mysql.name
 }
