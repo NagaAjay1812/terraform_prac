@@ -21,3 +21,7 @@ data "aws_ssm_parameter" "redis" {
   name = "/${var.project}/${var.environment}/redis_sg_id" # Replace with your SSM parameter path
 }
 
+data "aws_ssm_parameter" "backend_alb" {
+  name = "/${var.project}/${var.environment}/backend_alb_sg_id" # Replace with your SSM parameter path
+}
+

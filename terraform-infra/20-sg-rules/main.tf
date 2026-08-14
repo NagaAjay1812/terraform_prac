@@ -65,7 +65,7 @@ resource "aws_security_group_rule" "rabbitmq_from_bastion" {
   security_group_id        = local.rabbitmq_sg_id
 }
 
-# Rule 6: MongoDB to Catalogue
+# Rule 6: Catalogue to MongoDB  
 resource "aws_security_group_rule" "mongodb_from_catalogue" {
   type        = "ingress"
   description = "Allow inbound custom tcp traffic from catalogue"
@@ -79,7 +79,7 @@ resource "aws_security_group_rule" "mongodb_from_catalogue" {
   security_group_id        = local.mongodb_sg_id
 }
 
-# Rule 7: MongoDB to User
+# Rule 7: User to MongoDB
 resource "aws_security_group_rule" "mongodb_from_user" {
   type        = "ingress"
   description = "Allow inbound custom tcp traffic from user"
@@ -92,3 +92,47 @@ resource "aws_security_group_rule" "mongodb_from_user" {
   source_security_group_id = local.user_sg_id
   security_group_id        = local.mongodb_sg_id
 }
+
+# Rule 8: Bastion to Backend_alb
+resource "aws_security_group_rule" "backend_alb_from_bastion" {
+  type        = "ingress"
+  description = "Allow inbound custom tcp traffic from user"
+
+  from_port = 80
+  to_port   = 80
+  protocol  = "tcp"
+
+  # Source and Target SG connections
+  source_security_group_id = local.bastion_sg_id
+  security_group_id        = local.backend_alb_sg_id
+}
+
+# Rule 9: Bastion to catalogue
+resource "aws_security_group_rule" "catalogue_from_bastion" {
+  type        = "ingress"
+  description = "Allow inbound custom tcp traffic from user"
+
+  from_port = 22
+  to_port   = 22
+  protocol  = "tcp"
+
+  # Source and Target SG connections
+  source_security_group_id = local.bastion_sg_id
+  security_group_id        = local.catalogue_sg_id
+}
+
+# Rule 10: Backend_alb to catalogue
+resource "aws_security_group_rule" "catalogue_from_backend_alb" {
+  type        = "ingress"
+  description = "Allow inbound custom tcp traffic from user"
+
+  from_port = 8080
+  to_port   = 8080
+  protocol  = "tcp"
+
+  # Source and Target SG connections
+  source_security_group_id = local.catalogue_sg_id
+  security_group_id        = local.backend_alb_sg_id
+}
+
+
