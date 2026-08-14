@@ -55,7 +55,7 @@ resource "aws_ec2_instance_state" "stop_catalogue" {
   ]
 }
 
-# Step 4: Create the Catalogue AMI after the instance stops
+# 3): Create the Catalogue AMI after the instance stops
 resource "aws_ami_from_instance" "catalogue" {
   name               = "${var.project}-${var.environment}-catalogue-${aws_instance.catalogue.id}"
   source_instance_id = aws_instance.catalogue.id
