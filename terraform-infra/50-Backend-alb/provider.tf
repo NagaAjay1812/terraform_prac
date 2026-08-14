@@ -7,7 +7,7 @@ terraform {
   }
   backend "s3" {
     bucket       = "joindevops-remotestate-terr-infra"
-    key          = "40-database.tfstate"
+    key          = "50-backend-alb.tfstate"
     region       = "us-east-1"
     encrypt      = true
     use_lockfile = true
