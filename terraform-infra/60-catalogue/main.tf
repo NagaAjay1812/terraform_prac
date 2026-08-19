@@ -1,4 +1,4 @@
-# 1) MongoDB: step:1 Create the mongoDB EC2 Instance in database subnet
+# 1) MongoDB: step:1 Create the catalogue EC2 Instance in database subnet
 resource "aws_instance" "catalogue" {
   ami           = local.ami_id
   instance_type = var.inst_type
@@ -55,22 +55,22 @@ resource "aws_ec2_instance_state" "stop_catalogue" {
   ]
 }
 
-# 3): Create the Catalogue AMI after the instance stops
-resource "aws_ami_from_instance" "catalogue" {
-  name               = "${var.project}-${var.environment}-catalogue-${aws_instance.catalogue.id}"
-  source_instance_id = aws_instance.catalogue.id
+# # 3): Create the Catalogue AMI after the instance stops
+# resource "aws_ami_from_instance" "catalogue" {
+#   name               = "${var.project}-${var.environment}-catalogue-${aws_instance.catalogue.id}"
+#   source_instance_id = aws_instance.catalogue.id
 
-  # The instance was already stopped in Step 3.
-  snapshot_without_reboot = true
+#   # The instance was already stopped in Step 3.
+#   snapshot_without_reboot = true
 
-  depends_on = [
-    aws_ec2_instance_state.stop_catalogue
-  ]
+#   depends_on = [
+#     aws_ec2_instance_state.stop_catalogue
+#   ]
 
-  tags = merge(
-    local.catalogue_final_tags,
-    {
-      Name = "${var.project}-${var.environment}-catalogue-ami"
-    }
-  )
-}
+#   tags = merge(
+#     local.catalogue_final_tags,
+#     {
+#       Name = "${var.project}-${var.environment}-catalogue-ami"
+#     }
+#   )
+# }
